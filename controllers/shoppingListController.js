@@ -1,56 +1,183 @@
-exports.create = (req, res) => {
-  const { title, isArchived = false } = req.body;
+const ShoppingList = require("../models/ShoppingList");
 
-  const dtoOut = {
-    awid: "mock-awid",
-    id: "mock-id",
-    title,
-    isArchived,
-    ownerId: "mock-owner-id",
-    createdAt: new Date().toISOString(),
-    uuAppErrorMap: {}
-  };
+exports.create = async (req, res) => {
+  const { title } = req.body;
+  const userId = req.user.id; // берётся из checkAuth middleware
 
-  res.status(200).json(dtoOut);
+  try {
+    const newList = new ShoppingList({
+      title,
+      ownerId: userId,
+      items: [],
+      members: [userId],
+    });
+
+    await newList.save();
+
+    res.json({
+      id: newList._id,
+      name: newList.name,
+      ownerId: newList.ownerId,
+      members: newList.members,
+      items: newList.items,
+      uuAppErrorMap: {},
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "shoppingList/create failed",
+      uuAppErrorMap: { "shoppingList/create/error": { message: err.message } },
+    });
+  }
 };
 
-exports.delete = (req, res) => {
+
+exports.delete = async (req, res) => {
+  const { id } = req.body;
+  const userId = req.user.id;
+
+  try {
+    const list = await ShoppingList.findById(id);
+
+    if (!list) {
+      return res.status(404).json({
+        uuAppErrorMap: {
+          "shoppingList/delete/notFound": {
+            message: "Shopping list not found.",
+          },
+        },
+      });
+    }
+
+    if (list.ownerId !== userId) {
+      return res.status(403).json({
+        uuAppErrorMap: {
+          "shoppingList/delete/forbidden": {
+            message: "Only the owner can delete the list.",
+          },
+        },
+      });
+    }
+
+    await ShoppingList.findByIdAndDelete(id);
+
+    res.status(200).json({
+      id,
+      deleted: true,
+      uuAppErrorMap: {},
+    });
+  } catch (err) {
+    res.status(500).json({
+      uuAppErrorMap: {
+        "shoppingList/delete/error": {
+          message: err.message,
+        },
+      },
+    });
+  }
+};
+
+exports.get = async (req, res) => {
   const { id } = req.body;
 
-  const dtoOut = {
-    id,
-    deleted: true,
-    uuAppErrorMap: {}
-  };
+  try {
+    const list = await ShoppingList.findById(id);
 
-  res.status(200).json(dtoOut);
-};
+    if (!list) {
+      return res.status(404).json({
+        uuAppErrorMap: {
+          "shoppingList/get/notFound": {
+            message: "Shopping list not found"
+          }
+        }
+      });
+    }
 
-exports.list = (req, res) => {
-  const isArchived = req.query.isArchived === "true";
+    res.json({
+      id: list._id,
+      title: list.title,
+      ownerId: list.ownerId,
+      members: list.members,
+      items: list.items,
+      uuAppErrorMap: {}
+    });
 
-  const dtoOut = {
-    shoppingLists: [
-      {
-        id: "list-456",
-        title: "Groceries",
-        isArchived,
-        ownerId: "mock-owner-id",
-        createdAt: "2025-11-01T12:00:00.000Z"
-      },
-      {
-        id: "list-789",
-        title: "Weekend Trip",
-        isArchived,
-        ownerId: "mock-owner-id",
-        createdAt: "2025-11-10T12:00:00.000Z"
+  } catch (err) {
+    res.status(500).json({
+      error: "shoppingList/get failed",
+      uuAppErrorMap: {
+        "shoppingList/get/error": { message: err.message }
       }
-    ],
-    uuAppErrorMap: {}
-  };
-
-  res.status(200).json(dtoOut);
+    });
+  }
 };
+
+
+
+exports.list = async (req, res) => {
+  const userId = req.user.id; // из checkAuth
+
+  try {
+    const lists = await ShoppingList.find({ members: userId });
+
+    const dtoOut = {
+      shoppingLists: lists.map((list) => ({
+        id: list._id,
+        title: list.title,
+        ownerId: list.ownerId,
+        members: list.members,
+        items: list.items,
+        createdAt: list.createdAt,
+      })),
+      uuAppErrorMap: {}
+    };
+
+    res.json(dtoOut);
+  } catch (err) {
+    res.status(500).json({
+      uuAppErrorMap: {
+        "shoppingList/list/error": { message: err.message }
+      }
+    });
+  }
+};
+
+exports.update = async (req, res) => {
+  const { id, title } = req.body;
+
+  try {
+    const list = await ShoppingList.findById(id);
+
+    if (!list) {
+      return res.status(404).json({
+        uuAppErrorMap: {
+          "shoppingList/update/notFound": {
+            message: "Shopping list not found"
+          }
+        }
+      });
+    }
+
+    list.title = title || list.title;
+    await list.save();
+
+    res.json({
+      id: list._id,
+      title: list.title,
+      ownerId: list.ownerId,
+      members: list.members,
+      items: list.items,
+      uuAppErrorMap: {}
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "shoppingList/update failed",
+      uuAppErrorMap: {
+        "shoppingList/update/error": { message: err.message }
+      }
+    });
+  }
+};
+
 
 exports.invite = (req, res) => {
   const { listId, userEmail } = req.body;

@@ -1,7 +1,11 @@
-// temporary simulation of profile verification
 module.exports = (requiredProfiles) => {
   return (req, res, next) => {
-    const userProfile = req.headers["x-profile"]; // 'Owner' 'Member'
+    const userProfile = req.headers["x-profile"]; // должен быть: "Owner"
+
+    req.user = {
+      id: "mock-user-id",
+      role: userProfile || "Guest"
+    };
 
     const allowed = Array.isArray(requiredProfiles)
       ? requiredProfiles.includes(userProfile)

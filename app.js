@@ -6,6 +6,10 @@ const shoppingListRoutes = require("./routes/shoppingListRoutes");
 const itemRoutes = require("./routes/itemRoutes");
 const memberRoutes = require("./routes/memberRoutes");
 
+const connectDB = require("./config/db");
+connectDB();
+
+
 const app = express();
 app.use(cors());
 app.use(express.json());

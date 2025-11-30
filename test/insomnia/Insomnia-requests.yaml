@@ -1,0 +1,178 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: shoppingList
+meta:
+  id: wrk_234effa42b9a4fe2a3fd579f809c9c72
+  created: 1764528423291
+  modified: 1764529240574
+  description: ""
+collection:
+  - name: Max
+    meta:
+      id: fld_e8c053856a4b4e83bc0d3916ba52c622
+      created: 1764528594962
+      modified: 1764528594962
+      sortKey: -1764528594962
+      description: ""
+    children:
+      - url: http://localhost:3000/shoppingList/create
+        name: shoppingList/create
+        meta:
+          id: req_9b040c3ac2c94996aacb9e5fe0bf1264
+          created: 1764528614590
+          modified: 1764528709263
+          isPrivate: false
+          description: ""
+          sortKey: -1764528614590
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "title": "Jídlo"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: x-profile
+            value: Owner
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/shoppingList/list
+        name: New Request
+        meta:
+          id: req_dc14090db17941a8bc54421e544b349b
+          created: 1764528727721
+          modified: 1764528763551
+          isPrivate: false
+          description: ""
+          sortKey: -1764528727721
+        method: GET
+        headers:
+          - name: x-profile
+            value: Owner
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/shoppingList/get
+        name: shoppingList/get
+        meta:
+          id: req_eef33927300c428f83c1f063485b8b8d
+          created: 1764528811431
+          modified: 1764528880261
+          isPrivate: false
+          description: ""
+          sortKey: -1764528811431
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "id": "692c9246e562d61d4832b2d6"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: x-profile
+            value: Owner
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/shoppingList/update
+        name: shoppingList/update
+        meta:
+          id: req_9c7485e3bd474b5184c9c4e4ccb8bf64
+          created: 1764528908901
+          modified: 1764529118901
+          isPrivate: false
+          description: ""
+          sortKey: -1764528908901
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "id": "692c9246e562d61d4832b2d6",
+              "title": "Jídlo_2"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: x-profile
+            value: Owner
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:3000/shoppingList/delete
+        name: shoppingList/delete
+        meta:
+          id: req_f448ba5947894482971f5f8a4d9854cd
+          created: 1764529078146
+          modified: 1764529172782
+          isPrivate: false
+          description: ""
+          sortKey: -1764529078146
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "id": "692c9246e562d61d4832b2d6"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: x-profile
+            value: Owner
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_8e3f900530d233ea506fdaf24be7eb60cc75379f
+    created: 1764528423295
+    modified: 1764528423295
+environments:
+  name: Base Environment
+  meta:
+    id: env_8e3f900530d233ea506fdaf24be7eb60cc75379f
+    created: 1764528423293
+    modified: 1764528423293
+    isPrivate: false

@@ -16,7 +16,7 @@ router.post(
 
 router.post(
   "/delete",
-  checkAuth("Owner"),
+  checkAuth(["Owner"]),
   require("../dto/shoppingListDeleteDtoIn"),
   validateDto,
   shoppingListController.delete
@@ -31,6 +31,31 @@ router.get(
   validateDto,
   shoppingListController.list
 );
+
+router.get(
+  "/list",
+  checkAuth(["Owner", "Member"]),
+  shoppingListController.list
+);
+
+router.post(
+  "/get", 
+  checkAuth(["Owner", "Member"]),
+  shoppingListController.get
+);
+
+router.post(
+  "/update", 
+  checkAuth("Owner"),
+  shoppingListController.update
+);
+
+router.post(
+  "/delete",
+  checkAuth("Owner"),
+  shoppingListController.delete
+);
+
 
 router.post(
   "/invite",
