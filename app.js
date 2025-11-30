@@ -19,7 +19,7 @@ app.use("/shoppingList", shoppingListRoutes);
 app.use("/item", itemRoutes);
 app.use("/member", memberRoutes);
 
-// Starting the server
+//  Starting the server
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`✅ Server is running on http://localhost:${PORT}`);
