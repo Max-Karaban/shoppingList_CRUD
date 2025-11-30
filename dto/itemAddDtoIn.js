@@ -9,3 +9,4 @@ module.exports = [
     .notEmpty().withMessage("name is required")
     .isLength({ max: 100 }).withMessage("name must be under 100 characters")
 ];
+// max
